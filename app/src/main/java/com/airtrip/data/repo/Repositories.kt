@@ -91,7 +91,7 @@ class PlaceRepository @Inject constructor(
             .sortedBy { it.order }
             .joinToString(", ") { it.name }
             .ifBlank {
-                r.localityInfo?.informative.orEmpty().firstOrNull()?.name
+                r.localityInfo?.administrative.orEmpty().firstOrNull()?.name
                     ?: "Selected Location"
             }
     }

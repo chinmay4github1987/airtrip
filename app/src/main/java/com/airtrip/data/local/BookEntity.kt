@@ -35,7 +35,7 @@ data class BookEntity(
 
     companion object {
         fun fromDomain(book: Book, year: Int, month: Int): BookEntity = BookEntity(
-            id = book.id,
+            id = book.id!!,
             year = year,
             month = month,
             aLat = book.a.latitude,
