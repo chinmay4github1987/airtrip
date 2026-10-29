@@ -1,0 +1,3 @@
+sdk.dir=/path/to/Android/sdk
+MAPS_API_KEY=your_google_maps_sdk_key
+WAQI_TOKEN=your_token_from_aqicn.org/data-platform/token
