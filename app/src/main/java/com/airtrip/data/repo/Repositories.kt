@@ -22,10 +22,7 @@ class PlaceRepository @Inject constructor(
     // In-memory cache for speed, synchronized with Room database
     private val memoryCache = ConcurrentHashMap<String, Place>()
 
-    /**
-     * Cache key truncates latitude and longitude to 3 decimal places.
-     * E.g. 37.5642 and 37.5645 both hash to "37.564,127.001" (within ~100m).
-     */
+
     fun key(lat: Double, lng: Double): String =
         String.format(Locale.US, "%.3f,%.3f", lat, lng)
 
@@ -34,6 +31,15 @@ class PlaceRepository @Inject constructor(
     } catch (_: Exception) {
         0
     }
+
+//    suspend fun fetchLongitudeLatitude(lat: Double, lng: Double): Int = try{
+//
+//        geo.api(lat, lng, BuildConfig.GEO_TOKEN).data?.aqi?.toIntOrNull() ?: 0
+//
+//    }catch(_: Exception){
+//
+//        0
+//    }
 
     /**
      * Resolves a coordinate to a Place with locality name and AQI.
@@ -63,6 +69,8 @@ class PlaceRepository @Inject constructor(
         return place
     }
 
+
+
     suspend fun getCachedPlaces(): List<Place> {
         val dbPlaces = placeDao.getAll().map { it.toDomain() }
         if (dbPlaces.isNotEmpty()) {
@@ -79,11 +87,7 @@ class PlaceRepository @Inject constructor(
         placeDao.insertOrUpdate(CachedPlaceEntity.fromDomain(updated, coordKey))
     }
 
-    /**
-     * Concatenates the name of the two entries with the highest `order` value in
-     * localityInfo.administrative, sorted ascending by order.
-     * Example: "Seocho District, Yangjae 2(i)-dong".
-     */
+
     private fun addressName(r: GeoResponse): String {
         val adminList = r.localityInfo?.administrative.orEmpty()
         return adminList.sortedByDescending { it.order }
